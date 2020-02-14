@@ -1,27 +1,52 @@
 'use strict';
 
 function bullsAndCowsGame() {
-  const generedVelue = String(Math.round(Math.random() * 10000));
+  let generatedValue = [];
 
-  let boofer = 'Enter your Number \n';
+  for (let i = 0; i < 4; i++) {
+    const value = Math.floor(Math.random() * 10);
 
-  while (boofer) {
-    const personInput = prompt(boofer);
-    const checkValue = startGame(personInput, generedVelue);
+    if (!generatedValue.includes(value)) {
+      generatedValue.push(value);
+    } else {
+      i--;
+    }
+  }
+  generatedValue = generatedValue.join('');
+  // console.log(generatedValue);
+
+  let bufer = 'Enter your Number \n';
+
+  while (bufer) {
+    const personInput = prompt(bufer);
+    const checkValue = startGame(personInput, generatedValue);
 
     if (checkValue === null) {
-      boofer = null;
+      bufer = null;
     } else {
-      boofer += checkValue + '\n';
+      bufer += checkValue + '\n';
     }
   };
 }
 
 bullsAndCowsGame();
 
-function startGame(inputValue, generedVelue) {
+function startGame(inputValue, generatedValue) {
   let bulls = 0;
   let cows = 0;
+
+  const inVaildValue = () => {
+    const valueUnicItems = new Set(inputValue);
+
+    if (inputValue.length !== valueUnicItems.size) {
+      return true;
+    }
+
+    if (!isFinite(inputValue) || String(inputValue).length
+      !== String(generatedValue).length) {
+      return true;
+    }
+  };
 
   if (inputValue === null) {
     alert('End game');
@@ -29,13 +54,12 @@ function startGame(inputValue, generedVelue) {
     return null;
   }
 
-  if (!isFinite(inputValue) || String(inputValue).length
-    !== String(generedVelue).length) {
+  if (inVaildValue()) {
     return `invaild value`;
   } else {
     for (let i = 0; i < inputValue.length; i++) {
-      if (generedVelue.includes(inputValue[i])) {
-        if (generedVelue[i] === inputValue[i]) {
+      if (generatedValue.includes(inputValue[i])) {
+        if (generatedValue[i] === inputValue[i]) {
           bulls++;
         } else {
           cows++;
@@ -43,7 +67,7 @@ function startGame(inputValue, generedVelue) {
       }
     }
 
-    if (bulls === String(generedVelue).length) {
+    if (bulls === String(generatedValue).length) {
       alert('victory!');
 
       return null;
@@ -53,7 +77,7 @@ function startGame(inputValue, generedVelue) {
 
     return (
       `Your value is ${inputValue
-      || undefined}; bulls: ${bulls}, cows: ${cows}  ${generedVelue}`
+      || undefined}; bulls: ${bulls}, cows: ${cows}  ${generatedValue}`
     );
   }
 }
